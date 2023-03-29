@@ -1,0 +1,226 @@
+{% load static %}
+{% load my_tags %}
+{% show_categories as categories %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}page{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900" rel="stylesheet">
+    <!-- Font Awesome -->
+<link
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+rel="stylesheet"
+/>
+<!-- Google Fonts -->
+<link
+href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+rel="stylesheet"
+/>
+<!-- MDB -->
+<link
+href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.2.0/mdb.min.css"
+rel="stylesheet"
+/>
+
+    <link rel="stylesheet" href="{% static 'blog_app/css/bootstrap.css' %}">
+    
+    <link rel="stylesheet" href="{% static 'blog_app/style.css' %}">
+   
+
+  
+</head>
+
+<body>
+
+    <div class="wrapper">
+        {% block header %}
+        <header class="header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="logo">
+                            <h2><a href="{% url 'home' %}">Classic</a></h2>
+                        </div>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="menu" style="text-align: end;">
+                                                
+                                {% for category in categories %}
+                                 <div style="display: inline-block;margin:10px">   
+                                        <a href="{% url 'category' category.slug %}" style="font-size: x-large;">{{category.title}}</a>
+                        </div>
+                                {% endfor %}
+                            
+                            <div style="display: flex; justify-content: flex-end;">
+                              {% if request.user.is_authenticated %}
+                              <button type="button" class="btn btn-info">{{request.user}}</button>
+                              <form action="{% url 'logout' %}">
+                                <button type="submit" class="btn btn-success" style="font-size: initial;">Log out</button>
+                                                        </form>
+                              {% else %}
+
+                              <form action="{% url 'login' %}">
+                                <button type="submit" class="btn btn-success" style="font-size: initial;">Log in</button>
+                                                        </form>
+                              
+                              <form action="{% url 'register' %}">
+                                  <button type="submit" class="btn btn-success" style="font-size: initial;">Sign up</button>
+                              </form>
+                              {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </header>
+        {% endblock %}
+
+        {% block content %}<span>Content should be here</span> {% endblock %}
+        
+        {% block footer %}
+        <section class="">
+            <!-- Footer -->
+            <footer class="bg-secondary text-white text-center">
+              <!-- Grid container -->
+              <div class="container p-4">
+                <!--Grid row-->
+                <div class="row">
+                  <!--Grid column-->
+                  <div class="col-lg-6 col-md-12 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Footer Content</h5>
+          
+                    <p>
+                      Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iste atque ea quis
+                      molestias. Fugiat pariatur maxime quis culpa corporis vitae repudiandae
+                      aliquam voluptatem veniam, est atque cumque eum delectus sint!
+                    </p>
+                  </div>
+                  <!--Grid column-->
+          
+                  <!--Grid column-->
+                  <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase">Links</h5>
+          
+                    <ul class="list-unstyled mb-0">
+                      
+                      {% for category in categories %}
+                        <li>
+                          <a href="{% url 'category' category.slug %}" class="text-white">{{category.title}}</a>
+                        </li>
+                        {% endfor %}
+                      
+                    </ul>
+                  </div>
+                  <!--Grid column-->
+          
+                  <!--Grid column-->
+                  <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-uppercase mb-0">Links</h5>
+          
+                    <ul class="list-unstyled">
+                      <li>
+                        <a href="#!" class="text-white">Link 1</a>
+                      </li>
+                      <li>
+                        <a href="#!" class="text-white">Link 2</a>
+                      </li>
+                      <li>
+                        <a href="#!" class="text-white">Link 3</a>
+                      </li>
+                      <li>
+                        <a href="#!" class="text-white">Link 4</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <!--Grid column-->
+                </div>
+                <!--Grid row-->
+              </div>
+              <!-- Grid container -->
+          
+              <!-- Copyright -->
+              <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                © 2020 Copyright:
+                <a class="text-white" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+              </div>
+              <!-- Copyright -->
+            </footer>
+            <!-- Footer -->
+          </section>
+    {% endblock %}
+    
+    </div>
+    <!-- MDB -->
+<script
+type="text/javascript"
+src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.2.0/mdb.min.js"
+></script>
+    <script src="{% static 'blog_app/js/jquery-3.1.1.min.js' %}"></script>
+   
+    <script src="{% static 'blog_app/js/sidebar.js' %}"></script>
+    <script>
+        function cursPointer(event){
+            event.target.style.cursor ='pointer'
+        }
+
+        function like(event){
+            
+            console.log(event.target.dataset);
+            let csrf = event.target.nextElementSibling.value;
+            let commentId = event.target.dataset.commentId,
+            body = {
+              commentId : commentId,
+              csrfmiddlewaretoken : csrf
+            }
+            console.log(csrf)
+            return fetch(event.target.dataset.url, {
+              method : 'POST',
+              headers : {'Content-Type' : 'application/json'},
+              body : JSON.stringify(body)
+            }).then((response) => response.json()) 
+  .then((data) =>{
+    
+    document.getElementById(`${commentId}likes`).innerText = data.likes;
+    if (data.is_liked){
+      event.target.style.color ='rgb(239, 143, 10)';
+    } else event.target.style.color ='burlywood';
+  }
+  )}
+    </script>
+    <script>
+        function createReplay(id, post_id) {
+            let parent = document.getElementById(id);
+            if (document.contains(document.getElementById('newReplayForm'))) {
+                document.getElementById('newReplayForm').remove()
+            }
+            parent.insertAdjacentHTML('afterend','\
+            <form id="newReplayForm" action="/form/" method="post">\
+                {% csrf_token %}\
+                <p>\
+                    <label for="id_content">Content:</label>\
+                    <textarea name="content" cols="60" rows="3" required="" id="id_content"></textarea>\
+                </p>\
+                <p>\
+                    <select name="post" required  style="display:none" id="id_post">\
+                        <option value="' + post_id + '" selected></option>\
+                    </select>\
+                </p>\
+                <p>\
+                    <select name="parent" style="display:none" id="id_parentt">\
+                        <option value="'+ id + '" selected</option>\
+                    </select>\
+                </p>\
+                <button type="submit" class="btn btn-outline-success btn-rounded" style="font-size:inherit;">Add comment</button>\
+                <button onclick="newReplayForm.remove()" type="button" class="btn btn-outline-success btn-rounded" style="font-size:inherit;">Close</button>\
+            </form>');
+        }
+    </script>
+</body>
+
+</html>

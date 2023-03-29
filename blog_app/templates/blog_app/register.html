@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div style="text-align: center; display: flex; justify-content: center; margin: 35px;">  
+  <!-- form copied from UserCreationForm html edited-   -->
+    <form style="width: max-content; padding: 30px; background-color: blanchedalmond;" method="post" action="{% url 'register' %}">
+        <!-- input -->
+        {% csrf_token %}
+        <div class="form-outline mb-4">
+            <input type="text" name="username" maxlength="150" autocapitalize="none" autocomplete="username" autofocus=""
+                required="" id="id_username" class="form-control" />
+    
+            <label class="form-label" for="id_username">Username</label>
+            {{register_form.username.help_text}}
+        </div>
+    
+        <!-- Password input -->
+        <div class="form-outline mb-4">
+            <input type="password" name="password1" autocomplete="new-password" required="" class="form-control" />
+            <label class="form-label for=" id_password1">Password:</label>
+            {{register_form.password1.help_text}}
+           
+        </div>
+    
+        <div class="form-outline mb-4">
+            <input type="password" name="password2" autocomplete="new-password" required="" class="form-control" />
+            <label class="form-label for=" id_password2">Password confirmation:</label>
+            {{register_form.password2.help_text}}
+    
+        </div>
+            
+        
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+        
+        {% if messages %}
+            
+            {% for message in messages %}
+                <span style="color: red;">{{message}}</span>
+            {% endfor %}
+                
+        {% endif %}
+            
+      
+
+    </form>
+</div>
+    {% endblock content %}

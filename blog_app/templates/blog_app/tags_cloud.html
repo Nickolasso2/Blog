@@ -1,0 +1,8 @@
+<div class="tags" style="margin: 50px auto;">
+    <h2 class="sidebar-title">Tags</h2>
+    {% for tag in tags %}
+    <a href="{% url 'tag' tag.slug %}">
+        <button type="button" class="btn-outline-dark btn-rounded" ata-mdb-ripple-color="dark">{{tag.title}}</button>
+        </a>
+    {% endfor %}
+</div>

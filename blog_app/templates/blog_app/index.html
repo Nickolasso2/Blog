@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home page{{cat}}{% endblock %}
+{% block content %}
+
+<!-- ===================static banner -->
+<section class="bg-text-area" style="padding: 20px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="bg-text" style="
+                padding-left: 20px;
+                padding-right: 20px;
+            ">
+                    <h3>THE BLOG</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                        laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+                        voluptate velit esse cillum dolore eu fugiat nulla </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ===================///static banner -->
+
+
+    <h2  style="text-align: center;
+    margin: 40px 10px;
+    padding: 15px;
+    background-color: antiquewhite;
+    color: brown;"><i>{{info}}</i></h2>
+
+
+<!-- ============last_post big -->
+{% if last_post %}
+<section class="blog-post-area">
+    <div class="container">
+        <div class="row">
+            <div class="blog-post-area-style">
+                <div class="col-md-12">
+                    <div class="single-post-big">
+                        <div class="big-image">
+                            <img src="{{last_post.photo.url}}" alt="">
+                        </div>
+                        <div class="note note-info mb-3">
+                            <h3><a href="{% url 'post' last_post.slug %}">{{last_post.title}}</a></h3>
+                        </div>
+
+                        <p>{{last_post.content|truncatewords_html:150|safe}}</p>
+                        <div class="note note-info mb-3">
+                            <strong>{{last_post.created_at|date:"d.m.y H:i:s"}}</strong>
+                        </div>
+                        <div class="note note-info mb-3">
+                            <strong><span class="date"><span class="author">Posted By: <span class="author-name">Ebbo
+                                            Li</span></span></span></strong>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+   
+</section>
+{% endif %}
+<!-- ============///last_post big -->
+
+
+<!-- ==================posts  -->
+<div class="d-flex align-items-stretch" style="flex-wrap: wrap; justify-content: space-evenly; margin-top: 150px;">
+    {% for post in page_obj.object_list %}
+                    <div style="width: 30vw;">
+    
+                            <img src="{{post.photo.url}}" class="img-fluid" alt="Wild Landscape">
+                            <h3 style="min-height: 50px;"><a href="{% url 'post' post.slug %}">{{post.title}}.</a></h3>
+                            <h4><span>Posted By: <span class="author-name">Photo author</span></span>
+                            </h4>
+                            <div>{{post.content|truncatewords_html:50|safe}}</div>
+                            <h4><span>{{post.created_at|date:"d.m.y H:i:s"}}</span></h4>
+    
+                    </div>
+                    {% endfor %}
+</div>
+<!-- ==================///posts -->
+
+
+<!-- ===================pagination -->
+<nav aria-label="...">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?{{looking_for}}page={{page_obj.previous_page_number}}" style="font-size: 2em;">Previous</a>
+          </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link"  style="font-size: 2em;">Previous</a>
+          </li>
+        {% endif %}
+    </li>
+    {% for p in page_obj.paginator.page_range %}
+    {% if page_obj.number == p %}
+      <li class="page-item active" aria-current="page">
+        <a class="page-link" href="#" style="font-size: 2em;">{{p}} of {{page_obj.paginator.num_pages}}<span class="visually-hidden">(current)</span></a>
+      </li>
+      {% elif p > page_obj.number|add:-3 and p < page_obj.number|add:3 %}
+      <li class="page-item"><a class="page-link" href="?{{looking_for}}page={{p}}" style="font-size: 2em;">{{p}}</a></li>
+      {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?{{looking_for}}page={{page_obj.next_page_number}}" style="font-size: 2em;">Next</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+          <a class="page-link"  style="font-size: 2em;">Next</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+<!-- ===================///pagination -->
+
+
+{% endblock %}

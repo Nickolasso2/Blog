@@ -1,0 +1,119 @@
+<div class="commententries">
+    <h3>Comments</h3>
+    {% if user.is_authenticated %}
+    <form action="{% url 'add_com' %}" method="post">
+        {% csrf_token %}
+      
+        <br>
+        <div class="form-outline mb-4">
+            <label for="{{form.content.id_for_label}}" class="form-label">New comment</label>
+            {{form.content}}
+        </div>
+        <br>
+        {{form.post}}
+        
+            
+        <button type="submit" class="btn btn-success btn-rounded">Add comment</button>
+        
+    </form>
+    {% else %}
+    <div>
+        <a href="{% url 'login' %}">Log in</a>/
+        <a href="{% url 'register' %}">Sign up</a> to be able to add comments
+    </div>
+    {% endif %}
+
+    <hr style="border: 4px dotted black;">
+    {% load mptt_tags %}
+    <ul class="commentlist">
+        {% recursetree page_obj.object_list %}
+
+        <article class="comment">
+            <section id="{{node.id}}" class="comment-details" style="margin-bottom: 10px;">
+                <div class="author-name" style="border:2px rgb(219, 9, 9) dotted;">
+                    <h5>{{node.author}}</h5>
+                    <p>{{node.commented_date}}</p>
+                    <div class="comment-body">
+                        <p>{{node.content}}</p>
+                    </div>
+                    <div class="reply">
+
+                        <p>
+                            <span>
+                                
+                                    
+                                {% if user in node.liked.all %}
+                                <i class="fa fa-thumbs-up" aria-hidden="true" onmouseover="cursPointer(event)"
+                                    onclick="like(event)" data-comment-id="{{node.id}}" data-url="{% url 'like' %}"
+                                    style="color: rgb(239, 143, 10);">Like</i>
+                                {% csrf_token %}
+                                {% else %}
+                                <i class="fa fa-thumbs-up" aria-hidden="true" onmouseover="cursPointer(event)"
+                                    onclick="like(event)" data-comment-id="{{node.id}}" data-url="{% url 'like' %}"
+                                    style="color: burlywood;">Like</i>
+                                {% csrf_token %}
+                                {% endif %}
+                                    
+                            </span>
+                            <span id="{{node.id}}likes">{{node.liked.all|length}}</span>
+                        </p>
+
+                    </div>
+                </div>
+                {% if node.level < 3 %} <!-- if for node.level allows to limit replay the comments consequently limits
+                    the comments -->
+                    
+                    {% if user.is_authenticated %}
+                    <button type="button" onclick="createReplay({{node.id}}, {{node.post.id}})" class="btn btn-success btn-rounded">Comment</button>
+                    {% endif %}
+                        
+                    {% endif %}
+                        
+
+            </section>
+        </article>
+        {% if not node.is_leaf_node %}
+        <ul class="children">
+            {{ children }}
+        </ul>
+        {% endif %}
+
+        {% endrecursetree %}
+    </ul>
+
+
+    <!-- ===================pagination -->
+<nav aria-label="Page navigation example" style="display: flex;
+justify-content: center;">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{page_obj.previous_page_number}}" style="font-size: 1em;">&laquo;</a>
+          </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link"  style="font-size: 1em;">&laquo;</a>
+          </li>
+        {% endif %}
+    </li>
+    {% for p in page_obj.paginator.page_range %}
+    {% if page_obj.number == p %}
+      <li class="page-item active" aria-current="page">
+        <a class="page-link" href="#" style="font-size: 1em;">{{p}} of {{page_obj.paginator.num_pages}}<span class="visually-hidden">(current)</span></a>
+      </li>
+      {% elif p > page_obj.number|add:-3 and p < page_obj.number|add:3 %}
+      <li class="page-item"><a class="page-link" href="?page={{p}}" style="font-size: 1em;">{{p}}</a></li>
+      {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{page_obj.next_page_number}}" style="font-size: 1em;">&raquo;</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+          <a class="page-link"  style="font-size: 1em;">&raquo;</a>
+        </li>
+      {% endif %}
+    </ul>
+  </nav>
+<!-- ===================///pagination -->
