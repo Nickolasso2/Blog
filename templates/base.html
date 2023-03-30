@@ -8,9 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}page{% endblock %}</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900" rel="stylesheet">
+   
     <!-- Font Awesome -->
 <link
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -27,9 +25,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.2.0/mdb.min.css"
 rel="stylesheet"
 />
 
-    <link rel="stylesheet" href="{% static 'blog_app/css/bootstrap.css' %}">
+   
     
-    <link rel="stylesheet" href="{% static 'blog_app/style.css' %}">
+    <link rel="stylesheet" href="{% static 'blog_app/css/style.css' %}">
    
 
   
@@ -50,11 +48,14 @@ rel="stylesheet"
                     <div class="col-md-10">
                         <div class="menu" style="text-align: end;">
                                                 
-                                {% for category in categories %}
-                                 <div style="display: inline-block;margin:10px">   
-                                        <a href="{% url 'category' category.slug %}" style="font-size: x-large;">{{category.title}}</a>
-                        </div>
-                                {% endfor %}
+                                <div style="    display: flex;
+                                flex-wrap: wrap;">
+                                  {% for category in categories %}
+                                   <div style="display: inline-block;margin:0 10px">
+                                          <a href="{% url 'category' category.slug %}" style="font-size: x-large;">{{category.title}}</a>
+                                                          </div>
+                                  {% endfor %}
+                                </div>
                             
                             <div style="display: flex; justify-content: flex-end;">
                               {% if request.user.is_authenticated %}
@@ -161,7 +162,7 @@ rel="stylesheet"
 type="text/javascript"
 src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.2.0/mdb.min.js"
 ></script>
-    <script src="{% static 'blog_app/js/jquery-3.1.1.min.js' %}"></script>
+   
    
     <script src="{% static 'blog_app/js/sidebar.js' %}"></script>
     <script>
