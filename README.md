@@ -1,2 +1,2 @@
 # Blog
-Simple blog site with thpossibility to add reviews to articles.
+Simple blog site with the possibility to add reviews to articles.
